@@ -1,70 +1,36 @@
-import { UI_ELEMENTS, MESSAGES, closePopup, openPopup, resetInput } from "./view.js";
-import { sendMessage, showMessagesHistory } from "./message.js";
+import { UI_ELEMENTS, MESSAGES } from "./view.js";
+import { sendMessage, showMessagesHistory, renderMessage } from "./message.js";
 import { API } from './api.js';
-import { getInputValue } from './data.js';
 import Cookies from 'js-cookie';
-import { sendRequest, isStatusOK } from './network.js';
+import { userAuthentification, sendAuthentificationCode, setUserName } from './authentification.js';
 
-UI_ELEMENTS.FORMS.SEND_MESSAGE.addEventListener('submit', sendMessage);
+document.addEventListener('DOMContentLoaded', () => {
+  serverConnection();
+  showMessagesHistory();
+});
+
 UI_ELEMENTS.FORMS.AUTHENTIFICATION.addEventListener('submit', userAuthentification);
 UI_ELEMENTS.FORMS.AUTHENTIFICATION_CODE.addEventListener('submit', sendAuthentificationCode);
 UI_ELEMENTS.FORMS.SETTING_NAME.addEventListener('submit', setUserName);
 
-showMessagesHistory();
+function serverConnection() {
+  const authentificationToken = Cookies.get('token');
 
-async function userAuthentification() {
-  const mail = getInputValue(this);
-  const mailBody = {
-    email: mail,
-  }
+  if (!authentificationToken) return;
 
-  try {
-    const authentificationRequest = await sendRequest(API.AUTHORIZATION, 'POST', mailBody);
+  UI_ELEMENTS.CONTROLS.AUTHORIZATION.textContent = MESSAGES.LOG_OUT;
 
-    if (!isStatusOK(authentificationRequest)) throw MESSAGES.ERROR.WRONG_HTTP_STATUS;
+  const socketUrl = `${API.WEBSOCKET}${authentificationToken}`;
 
-    closePopup(this);
-    openPopup(UI_ELEMENTS.MODAL.AUTHENTIFICATION_CODE);
-    
-    UI_ELEMENTS.CONTROLS.AUTHORIZATION.textContent = MESSAGES.LOG_OUT;
-  } catch(error) {
-    console.log(error);
-    return;
-  } finally {
-    resetInput(this);
-  }
-}
+  const socketConnection = new WebSocket(socketUrl);
 
-async function setUserName() {
-  const userName = getInputValue(this);
-  const nameBody = {
-    name: userName,
-  }
+  socketConnection.addEventListener('open', function () {
+    UI_ELEMENTS.FORMS.SEND_MESSAGE.addEventListener('submit', function() {
+      sendMessage(socketConnection, this);
+    });
+  });
 
-  if (!userName) throw MESSAGES.ERROR.USER_NAME;
-
-  try {
-    const setUserNameRequest = await sendRequest(API.AUTHORIZATION, 'PATCH', nameBody);
-
-    if (!isStatusOK(setUserNameRequest)) throw MESSAGES.ERROR.WRONG_HTTP_STATUS;
-
-    closePopup(this);
-
-  } catch (error) {
-    console.log(error);
-    return;
-  } finally {
-    resetInput(this);
-  }
-}
-
-function sendAuthentificationCode() {
-  const authorizationCode = getInputValue(this);
-
-  if (!authorizationCode) return;
-
-  Cookies.set('token', authorizationCode);
-
-  resetInput(this);
-  closePopup(this);
+  socketConnection.addEventListener('message', function(event) {
+    renderMessage(JSON.parse(event.data));
+  })
 }

@@ -1,5 +1,3 @@
-// TO ADD OBJECT FOR ERROR MESSAGES AND FOR CLASSES
-
 const UI_ELEMENTS = {
   MESSAGES_HISTORY: document.querySelector('.messages'),
   MESSAGE_INPUT: document.getElementById('form__input'),
@@ -33,6 +31,7 @@ const CLASSES = {
   POPUP: 'modal',
   HIDE_POPUP: 'modal--hide',
   FORM_INPUT: 'input',
+  USER_MESSAGE: 'message--user',
 }
 
 const MESSAGES = {

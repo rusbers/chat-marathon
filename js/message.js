@@ -1,8 +1,14 @@
-import { UI_ELEMENTS, MESSAGES, getMessageTemplate, scrollDown, resetInput } from "./view.js";
-import { getUserMessageData, getMessagesDataHistory } from './data.js';
+import { UI_ELEMENTS, MESSAGES, CLASSES, getMessageTemplate, scrollDown, resetInput } from "./view.js";
 import { sendRequest, isStatusOK } from "./network.js";
 import { API } from './api.js';
+import { format } from 'date-fns';
 import Cookies from "js-cookie";
+
+function getInputValue(thisForm) {
+  const thisInput = thisForm.querySelector(CLASSES.FORM_INPUT);
+
+  return thisInput.value;
+}
 
 function GetMessageNodeElements(messageNode) {
   this.messageWrapper = messageNode.querySelector('.message');
@@ -11,26 +17,44 @@ function GetMessageNodeElements(messageNode) {
   this.messageTime = messageNode.querySelector('.time');
 }
 
-function fillMessage(messageElements, messageData) {
-  messageElements.messageContent.textContent = messageData.messageText;
-  messageElements.messageTime.textContent = messageData.messageTime;
-  messageElements.userName.textContent = messageData.userName;
+function fillMessage(messageElements, messageDetails) {
+  if (messageDetails.user.email === Cookies.get('mail')) {
+    messageElements.messageWrapper.classList.add(CLASSES.USER_MESSAGE);
+  }
+
+  messageElements.messageContent.textContent = messageDetails.text;
+  messageElements.userName.textContent = messageDetails.user.name;
+  messageElements.messageTime.textContent =  format(new Date(messageDetails.createdAt), 'HH:mm');
 }
 
-function sendMessage() {
+function sendMessage(socket, thisForm) {
+  const messageText = getInputValue(thisForm)
+
+  socket.send(JSON.stringify({
+    text: messageText,
+  }));
+
+  resetInput(thisForm);
+}
+
+function renderMessage(messageDetails) {
   const messageNode = getMessageTemplate();
-
   const messageElements = new GetMessageNodeElements(messageNode);
-  const messageData = getUserMessageData(this);
-  fillMessage(messageElements, messageData)
-  
-  UI_ELEMENTS.MESSAGES_HISTORY.append(messageNode)
 
-  resetInput(this);
+  fillMessage(messageElements, messageDetails);
+
+  UI_ELEMENTS.MESSAGES_HISTORY.append(messageNode);
+
   scrollDown();
 }
 
-// MESSAGES HISTORY
+async function showMessagesHistory() {
+  const messagesHistory = await getMessagesHistory();
+
+  messagesHistory.messages.slice(-5).forEach(message => {
+    renderMessage(message);
+  })
+}
 
 async function getMessagesHistory() {
   try {
@@ -44,23 +68,4 @@ async function getMessagesHistory() {
   }
 }
 
-function showMessage(message) {
-  const messageNode = getMessageTemplate();
-  const messageElements = new GetMessageNodeElements(messageNode);
-  const messageData = getMessagesDataHistory(message);
-  fillMessage(messageElements, messageData);
-
-  UI_ELEMENTS.MESSAGES_HISTORY.append(messageNode);
-
-  scrollDown();
-}
-
-async function showMessagesHistory() {
-  const messagesHistory = await getMessagesHistory();
-
-  messagesHistory.messages.slice(-150).forEach(message => {
-    showMessage(message);
-  })
-}
-
-export { sendMessage, GetMessageNodeElements, fillMessage, showMessagesHistory }
+export { sendMessage, GetMessageNodeElements, fillMessage, showMessagesHistory, renderMessage, getInputValue }
