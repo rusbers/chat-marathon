@@ -10,7 +10,7 @@ function getInputValue(thisForm) {
   return thisInput.value;
 }
 
-function GetMessageNodeElements(messageNode) {
+function GetMessageNodeElements(this: any, messageNode) {
   this.messageWrapper = messageNode.querySelector('.message');
   this.messageContent = messageNode.querySelector('.text');
   this.userName = messageNode.querySelector('.username');
@@ -51,7 +51,7 @@ function renderMessage(messageDetails) {
 async function showMessagesHistory() {
   const messagesHistory = await getMessagesHistory();
 
-  messagesHistory.messages.slice(-5).forEach(message => {
+  messagesHistory.messages.slice(-500).forEach(message => {
     renderMessage(message);
   })
 }

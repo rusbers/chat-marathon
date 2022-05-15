@@ -1,4 +1,8 @@
-const API = {
+interface API_LINKS {
+  [key: string]: string;
+}
+
+const API: API_LINKS = {
   AUTHORIZATION: 'https://mighty-cove-31255.herokuapp.com/api/user',
   MESSAGES: 'https://mighty-cove-31255.herokuapp.com/api/messages',
   WEBSOCKET: 'ws://mighty-cove-31255.herokuapp.com/websockets?',

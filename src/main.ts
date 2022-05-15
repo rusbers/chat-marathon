@@ -4,7 +4,7 @@ import { API } from './api.js';
 import Cookies from 'js-cookie';
 import { userAuthentification, sendAuthentificationCode, setUserName } from './authentification.js';
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', (): void => {
   serverConnection();
   showMessagesHistory();
 });
@@ -25,7 +25,8 @@ function serverConnection() {
   const socketConnection = new WebSocket(socketUrl);
 
   socketConnection.addEventListener('open', function () {
-    UI_ELEMENTS.FORMS.SEND_MESSAGE.addEventListener('submit', function() {
+    UI_ELEMENTS.FORMS.SEND_MESSAGE.addEventListener('submit', function(e) {
+      e.preventDefault();
       sendMessage(socketConnection, this);
     });
   });

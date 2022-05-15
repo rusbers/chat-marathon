@@ -26,7 +26,7 @@
       </div>
 
       <div class="message-field">
-        <form class="message-field__form" action="#" onsubmit="() => {return false}">
+        <form class="message-field__form" action="#" onsubmit="return false">
           <label>
             <input type="text" placeholder="сообщение..." id="form__input">
           </label>
@@ -40,7 +40,7 @@
     <div class="modal__body container">
       <div class="modal__content">
         <h2 class="modal__title title modal__title--settings">Настройки</h2>
-        <form class="form name-form" onsubmit="() => {return false}">
+        <form class="form name-form" onsubmit="return false">
           <label for="chat-name-input">Имя в чате:</label>
           <div class="modal__input-container input-container">
             <input class="input-container__input name-form__input input" id="chat-name-input" type="text" placeholder="Введите ваше имя">
@@ -56,7 +56,7 @@
     <div class="modal__body container">
       <div class="modal__content">
         <h2 class="modal__title modal__title--authorization title">Авторизация</h2>
-        <form class="form authorization-form" onsubmit="() => {return false}">
+        <form class="form authorization-form" onsubmit="return false">
           <label for="authorization-input">Почта:</label>
           <div class="modal__input-container input-container input-container--display">
             <input class="input-container__input input authorization-form__input modal-authorization__input" id="authorization-input" type="text" placeholder="">
@@ -72,7 +72,7 @@
     <div class="modal__body container">
       <div class="modal__content">
         <h2 class="modal__title title modal__title--authorization">Подтверждение</h2>
-        <form class="form authorization-code-form" onsubmit="() => {return false}">
+        <form class="form authorization-code-form" onsubmit="return false">
           <label for="authorization-code-input">Код:</label>
           <div class="modal__input-container input-container input-container--display">
             <input class="input-container__input authorization-code-form__input input modal-authorization__input" id="authorization-code-input" type="text" placeholder="">
@@ -93,7 +93,7 @@
       <span class="message__time time"></span>
     </div>
   </template>
-  <script src="js/main.js" type="module"></script>
+  <script src="build/main.js" type="module"></script>
 </body>
 
 </html>

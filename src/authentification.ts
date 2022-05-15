@@ -1,16 +1,19 @@
 import { API } from './api.js';
-import { MESSAGES, closePopup, openPopup, resetInput } from './view.js';
+import { UI_ELEMENTS, MESSAGES, closePopup, openPopup, resetInput } from './view.js';
 import { getInputValue } from './message.js';
 import { sendRequest, isStatusOK } from './network.js';
+import Cookies from 'js-cookie';
 
-async function userAuthentification() {
+interface fetchBody {
+  [key: string]: string;
+}
+
+async function userAuthentification(this: any): Promise<void> {
   const mail = getInputValue(this);
 
   if(!mail) return;
 
-  const mailBody = {
-    email: mail,
-  }
+  const mailBody: fetchBody = { email: mail }
 
   Cookies.set('mail', mail);
 
@@ -31,11 +34,9 @@ async function userAuthentification() {
   }
 }
 
-async function setUserName() {
+async function setUserName(this: any): Promise<void> {
   const userName = getInputValue(this);
-  const nameBody = {
-    name: userName,
-  }
+  const nameBody: fetchBody = { name: userName }
 
   if (!userName) throw MESSAGES.ERROR.USER_NAME;
 
@@ -54,7 +55,7 @@ async function setUserName() {
   }
 }
 
-function sendAuthentificationCode() {
+function sendAuthentificationCode(this: any) {
   const authorizationCode = getInputValue(this);
 
   if (!authorizationCode) return;
@@ -65,4 +66,4 @@ function sendAuthentificationCode() {
   closePopup(this);
 }
 
-export { userAuthentification, setUserName, sendAuthentificationCode}
+export { userAuthentification, setUserName, sendAuthentificationCode} 

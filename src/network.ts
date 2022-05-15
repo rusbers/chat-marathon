@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 
-async function sendRequest(url, method, body) {
+async function sendRequest(url: string, method: string, body?: object) {
   return await fetch(url, {
     method: method,
     headers: {
@@ -12,8 +12,8 @@ async function sendRequest(url, method, body) {
   })
 }
 
-function isStatusOK(request) {
-  return (request.status >= 200 && request.status <= 299);
+function isStatusOK(requestStatus: Response): boolean {
+  return (requestStatus.status >= 200 && requestStatus.status <= 299);
 }
 
 export { sendRequest, isStatusOK }

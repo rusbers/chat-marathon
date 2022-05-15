@@ -9,6 +9,7 @@
   "author": "rusbers",
   "license": "ISC",
   "devDependencies": {
+    "@types/js-cookie": "^3.0.2",
     "parcel": "^2.2.1"
   },
   "dependencies": {
