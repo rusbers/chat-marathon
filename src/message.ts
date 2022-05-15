@@ -18,7 +18,9 @@ function GetMessageNodeElements(this: any, messageNode) {
 }
 
 function fillMessage(messageElements, messageDetails) {
-  if (messageDetails.user.email === Cookies.get('mail')) {
+  const isUserEmail = messageDetails.user.email === Cookies.get('mail');
+
+  if (isUserEmail) {
     messageElements.messageWrapper.classList.add(CLASSES.USER_MESSAGE);
   }
 
@@ -27,7 +29,7 @@ function fillMessage(messageElements, messageDetails) {
   messageElements.messageTime.textContent =  format(new Date(messageDetails.createdAt), 'HH:mm');
 }
 
-function sendMessage(socket, thisForm) {
+function sendMessage(socket: WebSocket, thisForm: HTMLFormElement) {
   const messageText = getInputValue(thisForm)
 
   socket.send(JSON.stringify({

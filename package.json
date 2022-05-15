@@ -4,7 +4,8 @@
   "description": "",
   "scripts": {
     "start": "npx parcel index.html",
-    "build": "parcel build ./index.html"
+    "build": "parcel build ./index.html",
+    "tsc": "tsc --watch"
   },
   "author": "rusbers",
   "license": "ISC",
