@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "start": "npx parcel index.html",
-    "build": "tsc && parcel build ./index.html",
+    "build": "parcel build index.html --public-url ./ --no-content-hash",
     "tsc": "tsc --watch"
   },
   "author": "rusbers",
