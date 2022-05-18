@@ -4,13 +4,12 @@
   "description": "",
   "scripts": {
     "start": "npx parcel index.html",
-    "build": "parcel build ./index.html",
+    "build": "tsc && parcel build ./index.html",
     "tsc": "tsc --watch"
   },
   "author": "rusbers",
   "license": "ISC",
   "devDependencies": {
-    "@types/js-cookie": "^3.0.2",
     "parcel": "^2.2.1"
   },
   "dependencies": {
