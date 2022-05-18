@@ -7,13 +7,13 @@ import { serverConnection } from './main.js';
 
 async function emailValidation(this: any): Promise<void> {
   try {
-    const singInValidationResult = await serverRequestValidation(this, API.AUTHORIZATION, 'POST', 'email');
-    const responseData = await singInValidationResult.succes;
-    const responseError = await singInValidationResult.error;
+    const emailValidationResult = await serverRequestValidation(this, API.AUTHORIZATION, 'POST', 'email');
+    const responseSucces = await emailValidationResult.succes;
+    const responseError = await emailValidationResult.error;
   
     if (responseError) throw MESSAGES.ERROR.WRONG_HTTP_STATUS;
     
-    Cookies.set('mail', responseData.email)
+    Cookies.set('mail', responseSucces.email)
 
     closePopup(this);
     openPopup(UI_ELEMENTS.MODAL.AUTHENTIFICATION_CODE);
