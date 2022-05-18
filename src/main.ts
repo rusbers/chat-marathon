@@ -2,14 +2,14 @@ import { UI_ELEMENTS, MESSAGES } from "./view.js";
 import { sendMessage, showMessagesHistory, renderMessage } from "./message.js";
 import { API } from './api.js';
 import Cookies from 'js-cookie';
-import { userAuthentification, sendAuthentificationCode, setUserName } from './authentification.js';
+import { emailValidation, sendAuthentificationCode, setUserName } from './authentification.js';
 
 document.addEventListener('DOMContentLoaded', (): void => {
   serverConnection();
   showMessagesHistory();
 });
 
-UI_ELEMENTS.FORMS.AUTHENTIFICATION.addEventListener('submit', userAuthentification);
+UI_ELEMENTS.FORMS.AUTHENTIFICATION.addEventListener('submit', emailValidation);
 UI_ELEMENTS.FORMS.AUTHENTIFICATION_CODE.addEventListener('submit', sendAuthentificationCode);
 UI_ELEMENTS.FORMS.SETTING_NAME.addEventListener('submit', setUserName);
 
@@ -34,4 +34,10 @@ function serverConnection() {
   socketConnection.addEventListener('message', function(event) {
     renderMessage(JSON.parse(event.data));
   })
+}
+
+export { serverConnection };
+
+function singInValidation(arg0: string, singInValidation: any) {
+  throw new Error("Function not implemented.");
 }

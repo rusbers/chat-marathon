@@ -6,7 +6,6 @@ import Cookies from "js-cookie";
 
 function getInputValue(thisForm) {
   const thisInput = thisForm.querySelector(CLASSES.FORM_INPUT);
-
   return thisInput.value;
 }
 
@@ -70,4 +69,4 @@ async function getMessagesHistory() {
   }
 }
 
-export { sendMessage, GetMessageNodeElements, fillMessage, showMessagesHistory, renderMessage, getInputValue }
+export { sendMessage, fillMessage, showMessagesHistory, renderMessage, getInputValue }

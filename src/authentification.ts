@@ -1,31 +1,24 @@
 import { API } from './api.js';
 import { UI_ELEMENTS, MESSAGES, closePopup, openPopup, resetInput } from './view.js';
 import { getInputValue } from './message.js';
-import { sendRequest, isStatusOK } from './network.js';
+import { serverRequestValidation } from './network.js';
 import Cookies from 'js-cookie';
+import { serverConnection } from './main.js';
 
-interface fetchBody {
-  [key: string]: string;
-}
-
-async function userAuthentification(this: any): Promise<void> {
-  const mail = getInputValue(this);
-
-  if(!mail) return;
-
-  const mailBody: fetchBody = { email: mail }
-
-  Cookies.set('mail', mail);
-
+async function emailValidation(this: any): Promise<void> {
   try {
-    const authentificationRequest = await sendRequest(API.AUTHORIZATION, 'POST', mailBody);
-
-    if (!isStatusOK(authentificationRequest)) throw MESSAGES.ERROR.WRONG_HTTP_STATUS;
+    const singInValidationResult = await serverRequestValidation(this, API.AUTHORIZATION, 'POST', 'email');
+    const responseData = await singInValidationResult.succes;
+    const responseError = await singInValidationResult.error;
+  
+    if (responseError) throw MESSAGES.ERROR.WRONG_HTTP_STATUS;
+    
+    Cookies.set('mail', responseData.email)
 
     closePopup(this);
     openPopup(UI_ELEMENTS.MODAL.AUTHENTIFICATION_CODE);
 
-    UI_ELEMENTS.CONTROLS.AUTHORIZATION.textContent = MESSAGES.LOG_OUT;
+    UI_ELEMENTS.CONTROLS.AUTHORIZATION.textContent = MESSAGES.LOG_OUT; 
   } catch (error) {
     console.log(error);
     return;
@@ -35,16 +28,13 @@ async function userAuthentification(this: any): Promise<void> {
 }
 
 async function setUserName(this: any): Promise<void> {
-  const userName = getInputValue(this);
-  const nameBody: fetchBody = { name: userName }
-
-  if (!userName) throw MESSAGES.ERROR.USER_NAME;
-
   try {
-    const setUserNameRequest = await sendRequest(API.AUTHORIZATION, 'PATCH', nameBody);
+    const setUserNameRequest = await serverRequestValidation(this, API.AUTHORIZATION, 'PATCH', 'name');
+    const responseError = await setUserNameRequest.error;
 
-    if (!isStatusOK(setUserNameRequest)) throw MESSAGES.ERROR.WRONG_HTTP_STATUS;
+    if (responseError) throw MESSAGES.ERROR.WRONG_HTTP_STATUS;
 
+    serverConnection();
     closePopup(this);
 
   } catch (error) {
@@ -64,6 +54,7 @@ function sendAuthentificationCode(this: any) {
 
   resetInput(this);
   closePopup(this);
+  openPopup(UI_ELEMENTS.MODAL.SETTINGS);
 }
 
-export { userAuthentification, setUserName, sendAuthentificationCode} 
+export { emailValidation, setUserName, sendAuthentificationCode } 
