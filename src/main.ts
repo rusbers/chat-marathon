@@ -37,7 +37,3 @@ function serverConnection() {
 }
 
 export { serverConnection };
-
-function singInValidation(arg0: string, singInValidation: any) {
-  throw new Error("Function not implemented.");
-}
