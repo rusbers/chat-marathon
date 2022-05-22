@@ -38,32 +38,39 @@ function sendMessage(socket: WebSocket, thisForm: HTMLFormElement) {
   resetInput(thisForm);
 }
 
-function renderMessage(messageDetails): HTMLElement {
+function createOldMessageNode(messageDetails): HTMLElement {
   const messageNode = getMessageTemplate();
   const messageElements = new GetMessageNodeElements(messageNode);
   fillMessage(messageElements, messageDetails);
 
-  // UI_ELEMENTS.MESSAGES_HISTORY.append(messageNode);
   return messageNode as HTMLElement;
-  // scrollDown();
+}
+
+function renderNewMessage(messageDetails): void {
+  const messageNode = getMessageTemplate();
+  const messageElements = new GetMessageNodeElements(messageNode);
+  fillMessage(messageElements, messageDetails);
+
+  UI_ELEMENTS.MESSAGES_HISTORY.append(messageNode);
+  scrollDown();
 }
 
 async function showMessagesHistory() {
   const messagesHistoryRequest = await getMessagesHistory();
   const messagesHistory = await messagesHistoryRequest.messages;
   const renderedMessagesWrapper = document.createElement('div');
+  const messagesToRender = messagesHistory.slice(-20);
 
-  messagesHistory.slice(-20).forEach(message => {
-    renderedMessagesWrapper.append(renderMessage(message));
+  messagesToRender.forEach(message => {
+    renderedMessagesWrapper.append(createOldMessageNode(message));
   })
 
   UI_ELEMENTS.MESSAGES_HISTORY.append(renderedMessagesWrapper);
 
   scrollDown();
 
-  // TO REMADE IN ONE FUNCTION that has set as parameter an array:
   if (!localStorage.getItem('messagesHistory')) localStorage.setItem('messagesHistory', JSON.stringify(messagesHistory));
-  if (!localStorage.getItem('rendered messages')) localStorage.setItem('rendered messages', JSON.stringify([messagesHistory.slice(-20)]));
+  if (!localStorage.getItem('rendered messages')) localStorage.setItem('rendered messages', JSON.stringify([messagesToRender]));
   if (!localStorage.getItem('renderedMessagesCount')) localStorage.setItem('renderedMessagesCount', JSON.stringify(-20));
 }
 
@@ -79,4 +86,4 @@ async function getMessagesHistory() {
   }
 }
 
-export { sendMessage, fillMessage, showMessagesHistory, renderMessage, getInputValue }
+export { sendMessage, fillMessage, showMessagesHistory, renderNewMessage, createOldMessageNode, getInputValue }
