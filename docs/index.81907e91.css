@@ -3,24 +3,24 @@ html {
   height: 100%;
 }
 
-*, *:before, *:after {
+*, :before, :after {
   box-sizing: inherit;
 }
 
 body {
-  font-family: 'Roboto', 'Calibri', sans-serif;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: normal;
+  height: 100%;
   margin: 0;
   padding: 0;
-  height: 100%;
+  font-family: Roboto, Calibri, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
 }
 
 h1, h2, h3, h4, h5, h6, p, ol, ul {
+  font: inherit;
   margin: 0;
   padding: 0;
-  font: inherit;
 }
 
 ol, ul {
@@ -42,40 +42,40 @@ img {
 
 .chat__inner {
   width: 320px;
-  display: flex;
+  height: 100%;
   flex-direction: column;
   padding: 8px;
-  height: 100%;
+  display: flex;
 }
 
 .messages {
+  height: 80%;
+  border: 1px solid #000;
+  flex-direction: column;
   flex: 1 0 auto;
   margin-bottom: 8px;
-  display: flex;
-  flex-direction: column;
-  height: 80%;
-  overflow-y: scroll;
-  border: 1px solid #000;
   padding: 8px;
+  display: flex;
+  overflow-y: scroll;
 }
 
 .messages div {
-  margin-bottom: 8px;
-  display: flex;
   flex-direction: column;
   justify-content: flex-end;
   margin-top: auto;
+  margin-bottom: 8px;
+  display: flex;
 }
 
 .message {
   width: fit-content;
-  border-radius: 8px;
-  padding: 8px;
-  background-color: #E5E5E5;
-  margin-bottom: 8px;
   word-break: break-word;
-  display: flex;
+  background-color: #e5e5e5;
+  border-radius: 8px;
   flex-direction: column;
+  margin-bottom: 8px;
+  padding: 8px;
+  display: flex;
 }
 
 .message:last-child {
@@ -87,8 +87,8 @@ img {
 }
 
 .message--user {
+  background-color: #f6f6f6;
   align-self: flex-end;
-  background-color: #F6F6F6;
 }
 
 .message-field {
@@ -96,70 +96,70 @@ img {
 }
 
 .message-field__form {
-  display: flex;
   gap: 8px;
+  display: flex;
 }
 
 .message-field__form label {
-  display: flex;
   flex-grow: 1;
+  display: flex;
 }
 
 .message-field__form input {
-  flex-grow: 1;
-  padding: 8px;
   border: 1px solid #000;
+  flex-grow: 1;
   margin: 0;
+  padding: 8px;
 }
 
 .username {
   float: left;
 }
 
-.username::after {
-  content: ":\0000a0";
+.username:after {
+  content: ": ";
 }
 
 .time {
+  color: #333;
   align-self: flex-end;
   font-size: 14px;
-  font-weight: 300;
   font-style: italic;
-  color: #333333;
+  font-weight: 300;
 }
 
 .controls {
-  display: flex;
-  justify-content: space-between;
   flex-wrap: wrap;
+  justify-content: space-between;
   margin-bottom: 8px;
+  display: flex;
 }
 
 .btn {
   min-height: 32px;
-  display: flex;
+  color: #000;
+  background-color: #0000;
+  border: 1px solid #000;
   justify-content: center;
   align-items: center;
   padding: 7px;
-  border: 1px solid #000;
   text-decoration: none;
-  color: #000;
-  background-color: transparent;
+  display: flex;
 }
 
 .message--delivered {
-  background-color: #E5E5E5;
+  background-color: #e5e5e5;
 }
 
 .message--sent {
-  background-color: #F6F6F6;
+  background-color: #f6f6f6;
 }
 
 .input {
-  padding: 8px;
   border: 1px solid #000;
-  margin: 0;
   flex-grow: 1;
+  margin: 0;
+  padding: 8px;
 }
 
 .input-container {
@@ -175,28 +175,28 @@ img {
 }
 
 .modal {
-  position: fixed;
   width: 100%;
   height: 100%;
-  background-color: rgba(83, 83, 83, 0.8);
+  background-color: #535353cc;
+  position: fixed;
   top: 0;
   left: 0;
 }
 
 .modal__body {
   min-height: 100%;
-  display: flex;
   justify-content: center;
   align-items: center;
+  display: flex;
 }
 
 .modal__content {
-  position: relative;
   width: 275px;
-  padding: 15px;
   min-height: 320px;
   background-color: #fff;
   margin: 0 auto;
+  padding: 15px;
+  position: relative;
 }
 
 .modal__title--settings {
@@ -208,15 +208,15 @@ img {
 }
 
 .close-modal {
+  color: gray;
+  cursor: pointer;
+  background: none;
+  border: none;
   margin: 0;
   padding: 0;
-  background: transparent;
-  border: none;
-  color: grey;
   position: absolute;
   top: 15px;
   right: 15px;
-  cursor: pointer;
 }
 
 .show-popup {
@@ -235,3 +235,5 @@ img {
 .modal--hide {
   display: none;
 }
+
+/*# sourceMappingURL=index.81907e91.css.map */
