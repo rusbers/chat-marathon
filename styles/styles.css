@@ -59,6 +59,14 @@ img {
   padding: 8px;
 }
 
+.messages div {
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  margin-top: auto;
+}
+
 .message {
   width: fit-content;
   border-radius: 8px;
@@ -81,13 +89,6 @@ img {
 .message--user {
   align-self: flex-end;
   background-color: #F6F6F6;
-}
-
-.messages__history {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  margin-top: auto;
 }
 
 .message-field {

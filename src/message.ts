@@ -25,7 +25,7 @@ function fillMessage(messageElements, messageDetails) {
 
   messageElements.messageContent.textContent = messageDetails.text;
   messageElements.userName.textContent = messageDetails.user.name;
-  messageElements.messageTime.textContent =  format(new Date(messageDetails.createdAt), 'HH:mm');
+  messageElements.messageTime.textContent =  format(new Date(messageDetails.createdAt), 'HH:mm dd/MM');
 }
 
 function sendMessage(socket: WebSocket, thisForm: HTMLFormElement) {
@@ -38,23 +38,40 @@ function sendMessage(socket: WebSocket, thisForm: HTMLFormElement) {
   resetInput(thisForm);
 }
 
-function renderMessage(messageDetails) {
+function createOldMessageNode(messageDetails): HTMLElement {
   const messageNode = getMessageTemplate();
   const messageElements = new GetMessageNodeElements(messageNode);
+  fillMessage(messageElements, messageDetails);
 
+  return messageNode as HTMLElement;
+}
+
+function renderNewMessage(messageDetails): void {
+  const messageNode = getMessageTemplate();
+  const messageElements = new GetMessageNodeElements(messageNode);
   fillMessage(messageElements, messageDetails);
 
   UI_ELEMENTS.MESSAGES_HISTORY.append(messageNode);
-
   scrollDown();
 }
 
 async function showMessagesHistory() {
-  const messagesHistory = await getMessagesHistory();
+  const messagesHistoryRequest = await getMessagesHistory();
+  const messagesHistory = await messagesHistoryRequest.messages;
+  const renderedMessagesWrapper = document.createElement('div');
+  const messagesToRender = messagesHistory.slice(-20);
 
-  messagesHistory.messages.slice(-500).forEach(message => {
-    renderMessage(message);
+  messagesToRender.forEach(message => {
+    renderedMessagesWrapper.append(createOldMessageNode(message));
   })
+
+  UI_ELEMENTS.MESSAGES_HISTORY.append(renderedMessagesWrapper);
+
+  scrollDown();
+
+  if (!localStorage.getItem('messagesHistory')) localStorage.setItem('messagesHistory', JSON.stringify(messagesHistory));
+  if (!localStorage.getItem('rendered messages')) localStorage.setItem('rendered messages', JSON.stringify([messagesToRender]));
+  if (!localStorage.getItem('renderedMessagesCount')) localStorage.setItem('renderedMessagesCount', JSON.stringify(-20));
 }
 
 async function getMessagesHistory() {
@@ -69,4 +86,4 @@ async function getMessagesHistory() {
   }
 }
 
-export { sendMessage, fillMessage, showMessagesHistory, renderMessage, getInputValue }
+export { sendMessage, fillMessage, showMessagesHistory, renderNewMessage, createOldMessageNode, getInputValue }
